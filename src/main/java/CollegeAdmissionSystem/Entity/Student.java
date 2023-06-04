@@ -13,6 +13,16 @@ import java.util.List;
  );
 * */
 public class Student extends  Entity {
+    public Student(int id, String lastName, String name, String surName, String email, String phone, Date birthday, List<Course> courses) {
+        super(id);
+        LastName = lastName;
+        Name = name;
+        SurName = surName;
+        Email = email;
+        Phone = phone;
+        Birthday = birthday;
+        Courses = courses;
+    }
 
     public String LastName;
     public String Name;
@@ -22,4 +32,3 @@ public class Student extends  Entity {
     public  Date Birthday;
     List<Course> Courses;
 }
-

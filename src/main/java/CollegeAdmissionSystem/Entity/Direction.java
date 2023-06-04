@@ -11,7 +11,14 @@ import java.util.List;
  );
 * */
 public class Direction extends Entity {
+
+    public Direction(int id, String name, List<Course> courses) {
+        super(id);
+        Name = name;
+        Courses = courses;
+    }
+
     public String Name;
-    List<Course> Courses;
+    public List<Course> Courses;
 }
 
