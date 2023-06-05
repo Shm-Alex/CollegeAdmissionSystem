@@ -20,8 +20,9 @@
   create table Course(
  Id integer primary key AUTOINCREMENT ,
  Name varchar(256) not null,
+ HoursPerWeek INTEGER,
  DirectionId INTEGER ,
- FOREIGN KEY (DirectionId)  REFERENCES Direction (id)
+  FOREIGN KEY (DirectionId)  REFERENCES Direction (id)
  );
 
   create table StudentCourses(

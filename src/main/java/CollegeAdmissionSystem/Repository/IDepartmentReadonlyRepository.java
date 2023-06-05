@@ -8,3 +8,4 @@ public interface IDepartmentReadonlyRepository {
       public List<Department> getDepartments();
 
 }
+

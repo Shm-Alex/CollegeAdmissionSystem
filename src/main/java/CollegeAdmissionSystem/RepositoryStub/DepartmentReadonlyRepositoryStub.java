@@ -8,6 +8,7 @@ import CollegeAdmissionSystem.Repository.IDepartmentReadonlyRepository;
 import java.util.Arrays;
 import java.util.List;
 
+
 public class DepartmentReadonlyRepositoryStub implements IDepartmentReadonlyRepository {
     @Override
     public List<Department> getDepartments() {
@@ -67,3 +68,4 @@ public class DepartmentReadonlyRepositoryStub implements IDepartmentReadonlyRepo
         return ret;
     }
 }
+
