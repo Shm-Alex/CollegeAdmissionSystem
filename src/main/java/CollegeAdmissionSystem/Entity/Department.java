@@ -10,7 +10,11 @@ import java.util.List;
         );
         */
 public class Department extends Entity {
+    public Department()
+    {
+        super(0);
 
+    }
     public Department(int id, String name, List<Direction> directions) {
         super(id);
         Name = name;

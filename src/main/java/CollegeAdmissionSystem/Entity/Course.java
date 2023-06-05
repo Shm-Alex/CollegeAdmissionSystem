@@ -22,5 +22,10 @@ public class Course extends Entity {
     }
 
     public String Name;
-    public  byte HoursPerWeek;
+    public  int HoursPerWeek;
+
+    public Course() {
+        super(0);
+        Name = null;
+    }
 }

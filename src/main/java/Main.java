@@ -7,6 +7,7 @@ import CollegeAdmissionSystem.Entity.Department;
 import CollegeAdmissionSystem.Entity.Direction;
 import CollegeAdmissionSystem.Repository.IDepartmentCreateRepository;
 import CollegeAdmissionSystem.Repository.IDepartmentReadonlyRepository;
+import CollegeAdmissionSystem.RepositoryImplentation.DepartmentReadonlyRepository;
 import CollegeAdmissionSystem.RepositoryStub.DepartmentReadonlyRepositoryStub;
 
 import java.lang.reflect.Field;
@@ -36,25 +37,43 @@ public class Main {
         }
 
     }
-    interface Param{};
+
+
+    /*
+    * Добавляет в базу список курсов
+    * */
+public static void SaveCorsesToDb(String pathToDb){
+    if (pathToDb==null||pathToDb.isBlank())
+            pathToDb="C:\\Education\\Java\\sqlite-tools-win32-x86-3420000/CollegeAdmissionSystem";
+    IDepartmentReadonlyRepository departmentRepository = new DepartmentReadonlyRepositoryStub();
+    //var m= new Main(departmentRepository);
+    //m.ShowDepartments();
+
+
+    String connectionString = "jdbc:sqlite:"+pathToDb;
+    try {
+        var conn=  DriverManager.getConnection(connectionString);
+        IDepartmentCreateRepository departmentCreateRepository=new DepartmentCreateRepository(conn);
+        departmentCreateRepository.SaveDepartments(departmentRepository.getDepartments());
+    } catch (SQLException e) {
+
+        throw new RuntimeException(e);
+    } catch (CourseSaveDbException e) {
+        throw new RuntimeException(e);
+    }
+}
     public static void main(String[] args) {
-        IDepartmentReadonlyRepository departmentRepository = new DepartmentReadonlyRepositoryStub();
-        var m= new Main(departmentRepository);
-        m.ShowDepartments();
-
-        String pathToDb="C:\\Education\\Java\\sqlite-tools-win32-x86-3420000/CollegeAdmissionSystem";
+        String         pathToDb="C:\\Education\\Java\\sqlite-tools-win32-x86-3420000/CollegeAdmissionSystem";
         String connectionString = "jdbc:sqlite:"+pathToDb;
-        try {
-            var conn=  DriverManager.getConnection(connectionString);
-            IDepartmentCreateRepository departmentCreateRepository=new DepartmentCreateRepository(conn);
-            departmentCreateRepository.SaveDepartments(departmentRepository.getDepartments());
-        } catch (SQLException e) {
+        try{
 
-            throw new RuntimeException(e);
-        } catch (CourseSaveDbException e) {
+            var m= new Main(new DepartmentReadonlyRepository(DriverManager.getConnection("jdbc:sqlite:"+pathToDb)));
+            m.ShowDepartments();
+        }
+        catch (Exception e )
+        {
             throw new RuntimeException(e);
         }
-
 
     }
 }

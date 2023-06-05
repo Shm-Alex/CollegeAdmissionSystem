@@ -23,39 +23,45 @@ public abstract  class AbstractSqlLightRepository
         {
             T data=type.getConstructor().newInstance();
             for (Field field : fields) {
-                field.set(data,rs.getObject(field.getName()));
+
+                try {
+                    Object object = rs.getObject(field.getName());
+                    field.set(data, object);
+                } catch ( SQLException e)
+                {
+                    //Cannot map some complex data  eg Lists of sub queries
+                }
+
+
+
             }
             results.add(data);
         }
         return results;
     }
-   /* public <T,Param> List<T> parametrasedQuery(String sql , Param params, Class<T>type ) throws Exception {
+    public <T> List<T> parametrasedQuery(String sql , int  id, Class<T>type ) throws Exception {
         List<T> results =new ArrayList<T>();
         Field[] fields=type.getFields();
 
 
         //ResultSet rs= conn.createStatement().executeQuery(sql);
         PreparedStatement ps = conn.prepareStatement(sql);
-        Field[] paramsFields=params.getClass().getDeclaredFields();
-
-        for (Field paramsField : paramsFields)
-        {
-            try {
-                if (paramsField.getType() == String.class) ps.setString(paramsField.getName(), paramsField.get(params));
-                if (paramsField.getType() == int.class) ps.setInt(paramsField.getName(), paramsField.getInt(params));
-               } catch (IllegalAccessException e)
-                {throw new RuntimeException(e);}
-
-        }
+        ps.setInt(1,id);
         var rs= ps.executeQuery();
         while (rs.next())
         {
             T data=type.getConstructor().newInstance();
             for (Field field : fields) {
-                field.set(data,rs.getObject(field.getName()));
+                try {
+                    Object object = rs.getObject(field.getName());
+                    field.set(data, object);
+                } catch ( SQLException e)
+                {
+                    //Cannot map some complex data  eg Lists of sub queries
+                }
             }
             results.add(data);
         }
         return results;
-    }*/
+    }
 }
