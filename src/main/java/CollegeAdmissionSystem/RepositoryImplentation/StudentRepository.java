@@ -12,12 +12,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
-class StudentCourse
-{
-    StudentCourse(){};
-    public int StudentId;
-    public int CourseId;
-}
+
 public class StudentRepository extends AbstractSqlLightRepository implements IStudentRepository
 {
 
@@ -79,7 +74,8 @@ public class StudentRepository extends AbstractSqlLightRepository implements ISt
 
     @Override
     public Student CreateStudent(String LastName, String Name, String SurName, String Email, String Phone, Date Birthday) {
-        if (getStudentByEmail(Email)!=null) return  Update(LastName,Name,SurName,Email,Phone,Birthday);
+        Student studentByEmail = getStudentByEmail(Email);
+        if (studentByEmail !=null) return  Update(studentByEmail.Id,LastName,Name,SurName,Email,Phone,Birthday);
         try {
 
             List<Student>   result= preparedQuery(
@@ -93,8 +89,7 @@ public class StudentRepository extends AbstractSqlLightRepository implements ISt
                             ps.setString(3,SurName);
                             ps.setString(4,Email);
                             ps.setString(5,Phone);
-                            ps.setString(6,"1-mar-1979");
-                            //ps.setString(6,Birthday.toString());
+                            ps.setString(6, Birthday.toString());
                             return ps;
                         }
                     },
@@ -105,6 +100,9 @@ public class StudentRepository extends AbstractSqlLightRepository implements ISt
             throw new RuntimeException(e);
         }
     }
+
+
+
 
     /*
   create table StudentCourses(
@@ -120,6 +118,18 @@ public class StudentRepository extends AbstractSqlLightRepository implements ISt
         try {
 
             List<StudentCourse>   result= preparedQuery(
+                    "select StudentId,CourseId from  StudentCourses where StudentId=? and CourseId=? ",
+                    new IPrepareStatement() {
+                        @Override
+                        public PreparedStatement AdditionalPrepareStatement(PreparedStatement ps) throws SQLException {
+                            ps.setInt(1,StudentId);
+                            ps.setInt(2,CourseId);
+                            return ps;
+                        }
+                    },
+                    StudentCourse.class);
+            if(result.isEmpty())
+              result= preparedQuery(
                     "insert into StudentCourses(StudentId,CourseId) values(?,?) RETURNING *;",
                     new IPrepareStatement() {
                         @Override
@@ -155,17 +165,7 @@ public class StudentRepository extends AbstractSqlLightRepository implements ISt
             student.Courses= preparedQuery("select c.* from StudentCourses sc " +
                     "join Course c on c.Id=sc.CourseId " +
                     " where sc.StudentId=?",student.Id, Course.class);
-  /*
-   var departmentIds= preparedQuery("select d.id from  Department d " +
-                        "join Direction dir on dir.DepartmentId=d.Id " +
-                        "join Course c on c.DirectionId=c.Id " +
-                        "join StudentCourses sc on c.Id=sc.CourseId " +
-                        "join Student s on s.Id=sc.StudentId " +
-                        " where sc.StudentId=?",student.Id, int.class);
-                if(!departmentIds.isEmpty())
-                {
-                    IDepartmentReadonlyRepository
-                }*/
+
             for (Course course :  student.Courses)
             {
                 var directions= preparedQuery("select * from Direction where id=? ",
@@ -212,7 +212,31 @@ public class StudentRepository extends AbstractSqlLightRepository implements ISt
     }
 
     @Override
-    public Student Update(String LastName, String Name, String SurName, String Email, String Phone, Date Birthday) {
-        return null;
+    public Student Update(int id, String lastName, String name, String surName, String email, String phone, Date birthday)
+    {
+        try {
+
+            List<Student>   result= preparedQuery(
+
+                    "update  Student set LastName=?, Name=?, SurName=?,  Email=?,  Phone=?,  Birthday=? where id=?  RETURNING *;",
+                    new IPrepareStatement() {
+                        @Override
+                        public PreparedStatement AdditionalPrepareStatement(PreparedStatement ps) throws SQLException {
+                            ps.setString(1,lastName);
+                            ps.setString(2,name);
+                            ps.setString(3,surName);
+                            ps.setString(4,email);
+                            ps.setString(5,phone);
+                            ps.setString(6,birthday.toString());
+                            ps.setInt(7,id);
+                            return ps;
+                        }
+                    },
+                    Student.class);
+            if(result.isEmpty())return  null;
+            return result.get(0);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }
