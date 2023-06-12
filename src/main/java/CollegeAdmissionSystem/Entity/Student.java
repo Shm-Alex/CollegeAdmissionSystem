@@ -30,5 +30,5 @@ public class Student extends  Entity {
     public String Email;
     public String Phone;
     public  Date Birthday;
-    List<Course> Courses;
+    public List<Course> Courses;
 }

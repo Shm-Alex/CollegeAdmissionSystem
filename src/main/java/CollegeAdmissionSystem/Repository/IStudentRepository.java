@@ -13,16 +13,17 @@ public Student getStudentByEmail(String Email );
              String SurName,
              String Email,
              String Phone,
-             Date Birthday,
-            List<Integer> CoursesIds
+             Date Birthday
     );
+    public Student AddCourseToStudent(int StudentId,int CourseId);
+    public Student RemoveCourseFromStudent(int StudentId,int CourseId);
     public Student Update(
             String LastName,
             String Name,
             String SurName,
             String Email,
             String Phone,
-            Date Birthday,
-            List<Integer> CoursesIds
+            Date Birthday
+
     );
 }

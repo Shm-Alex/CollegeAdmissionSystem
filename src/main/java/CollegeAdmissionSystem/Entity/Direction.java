@@ -20,7 +20,8 @@ public class Direction extends Entity {
 
     public String Name;
     public List<Course> Courses;
-
+    public int DepartmentId;
+    public  Department Department;
     public Direction() {
         super(0);
         Name = null;

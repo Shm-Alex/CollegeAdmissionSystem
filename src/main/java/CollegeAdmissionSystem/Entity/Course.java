@@ -9,6 +9,7 @@ package CollegeAdmissionSystem.Entity;
  );
 * */
 public class Course extends Entity {
+     public Direction Direction;
     public Course(int id, String name) {
         super(id);
         Name = name;
@@ -23,6 +24,7 @@ public class Course extends Entity {
 
     public String Name;
     public  int HoursPerWeek;
+    public  int  DirectionId;
 
     public Course() {
         super(0);
