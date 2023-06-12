@@ -14,6 +14,7 @@ import java.util.Date;
 import java.util.List;
 class StudentCourse
 {
+    StudentCourse(){};
     public int StudentId;
     public int CourseId;
 }
@@ -82,6 +83,7 @@ public class StudentRepository extends AbstractSqlLightRepository implements ISt
         try {
 
             List<Student>   result= preparedQuery(
+                    //"insert into Student(LastName, Name, SurName,  Email,  Phone,  Birthday) values('test','test','test','test@test.com','1234567','1-mar-1989') RETURNING *;",
                     "insert into Student(LastName, Name, SurName,  Email,  Phone,  Birthday) values(?,?,?,?,?,?) RETURNING *;",
                     new IPrepareStatement() {
                         @Override
@@ -91,7 +93,8 @@ public class StudentRepository extends AbstractSqlLightRepository implements ISt
                             ps.setString(3,SurName);
                             ps.setString(4,Email);
                             ps.setString(5,Phone);
-                            ps.setString(6,Birthday.toString());
+                            ps.setString(6,"1-mar-1979");
+                            //ps.setString(6,Birthday.toString());
                             return ps;
                         }
                     },

@@ -21,6 +21,7 @@ public abstract  class AbstractSqlLightRepository
     public <T> List<T> query(String sql , Class<T>type ) throws Exception {
         return  preparedQuery(sql,null,type);
     }
+
     public <T> List<T> preparedQuery(String sql , IPrepareStatement  psHandler, Class<T>type ) throws Exception
     {
         List<T> results =new ArrayList<T>();

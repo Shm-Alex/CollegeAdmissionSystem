@@ -5,6 +5,7 @@ package CollegeAdmissionSystem.Entity;
 * /
  */
 public class Entity {
+    public Entity(){};// нужен чтобы в мапере инстанцировать пустую сущьность без Id
     public Entity(int id) {
         Id = id;
     }

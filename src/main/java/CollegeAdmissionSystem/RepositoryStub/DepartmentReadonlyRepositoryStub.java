@@ -67,5 +67,12 @@ public class DepartmentReadonlyRepositoryStub implements IDepartmentReadonlyRepo
         );
         return ret;
     }
+
+    @Override
+    public Department getDepartmentById(int id) {
+        return null;
+    }
+
+
 }
 
