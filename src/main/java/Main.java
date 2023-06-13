@@ -83,16 +83,38 @@ public static void SaveCorsesToDb(String pathToDb){
                     new StudentRepository(DriverManager.getConnection("jdbc:sqlite:"+pathToDb))
             );
             var departments=m.ShowDepartments();
-            var student=m._studentRepository.CreateStudent("Shmykov","Alexander","Mitrich","Shmykov.alexander@Gmail.com","9031597221", new Date()) ;
+            Student [] students
+                    = new Student[]
+                    {
+                            m._studentRepository.CreateStudent("Shmykov","Alexander","Mitrich","Shmykov.alexander@Gmail.com","9031597221", new Date()),
+                            m._studentRepository.CreateStudent("Nikita","Lilia","","LNikita@bi-telco.com","", new Date()),
+                            m._studentRepository.CreateStudent("Levkovich","Roman","","rlevkovich@bi-telco.com","", new Date()),
+                            m._studentRepository.CreateStudent("Kovaleva","Ekaterina","","ekovaleva@bi-telco.com","", new Date()),
+                            m._studentRepository.CreateStudent("Zhokhov","Artem","","azhokhov@bi-telco.com","", new Date()),
+
+                    } ;
 
             //m._departmentRepository.getDepartments();
-            var courses=departments.get(0).Directions.get(0).Courses;
-            for (Course course : courses) {
-                ShowStudent(student);
-                student=m._studentRepository.AddCourseToStudent(student.Id,course.Id);
+
+            for (int i = 0; i <students.length; i++)
+            {
+                var courses=departments.get(0).Directions.get(i).Courses;
+                for (Course course : courses) {
+                    students[i]=m._studentRepository.AddCourseToStudent(students[i].Id,course.Id);
+                }
+
             }
 
-            ShowStudent(student);
+
+            for (Student student : students) {
+                ShowStudent(student);
+            }
+            for (Student student : students) {
+                for (Course course : student.Courses) {
+                    m._studentRepository.RemoveCourseFromStudent(student.Id,course.Id);
+                }
+            }
+
 
         }
         catch (Exception e )

@@ -6,7 +6,8 @@ import java.util.Date;
 import java.util.List;
 
 public interface IStudentRepository {
-public Student getStudentByEmail(String Email );
+    public List<Student> getStudents();
+    public Student getStudentByEmail(String Email );
     public Student CreateStudent(
              String LastName,
              String Name,

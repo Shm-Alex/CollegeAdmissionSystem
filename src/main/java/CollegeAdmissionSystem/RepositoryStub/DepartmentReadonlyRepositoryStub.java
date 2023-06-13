@@ -51,7 +51,7 @@ public class DepartmentReadonlyRepositoryStub implements IDepartmentReadonlyRepo
                                                 new Course(12,"Schemetechnics ", (byte) 3),
                                                 new Course(14," Electrotechnics basics")
                                         )),
-                                new Direction(5,"Networks Organisation ",
+                                new Direction(6,"Networks Organisation ",
                                         Arrays.asList(
                                                 new Course(15,"Linux Networks ", (byte) 3),
                                                 new Course(16,"Novel Netware")

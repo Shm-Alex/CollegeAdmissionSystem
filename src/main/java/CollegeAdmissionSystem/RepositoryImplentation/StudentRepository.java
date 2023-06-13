@@ -21,6 +21,48 @@ public class StudentRepository extends AbstractSqlLightRepository implements ISt
     }
 
     @Override
+    public List<Student> getStudents() {
+        try {
+            List<Student>   result= preparedQuery(
+                    "Select * from student ",
+                    new IPrepareStatement() {
+                        @Override
+                        public PreparedStatement AdditionalPrepareStatement(PreparedStatement ps) throws SQLException {
+
+                            return ps;
+                        }
+                    },
+                    Student.class);
+            //if (result.isEmpty()) return null;
+            for (Student student : result) {
+                student.Courses= preparedQuery("select c.* from StudentCourses sc " +
+                        "join Course c on c.Id=sc.CourseId " +
+                        " where sc.StudentId=?",student.Id, Course.class);
+                for (Course course :  student.Courses)
+                {
+                    var directions= preparedQuery("select * from Direction where id=? ",
+                            course.DirectionId,
+                            Direction.class
+                    );
+                    course.Direction=directions.isEmpty()?null:directions.get(0);
+                    if(course.Direction!=null)
+                    {
+                        var departments= preparedQuery("select * from Department where id=? ",
+                                course.Direction.DepartmentId,
+                                Department.class);
+                        course.Direction.Department=departments.isEmpty()?null:departments.get(0);
+                    }
+                }
+
+            }
+            return result;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    @Override
     public Student getStudentByEmail(String Email) {
         try {
             List<Student>   result= preparedQuery(
