@@ -34,6 +34,10 @@ public class Main {
 
     public List<Department> ShowDepartments(){
          var departments= _departmentRepository.getDepartments();
+        System.out.println("===========================departments====================================");
+         ShowObject(departments);
+        System.out.println("===========================departments====================================");
+         /*
         for (Department department : departments) {
             System.out.println(department.Id + department.Name);
             var directions= department.Directions;
@@ -44,7 +48,7 @@ public class Main {
                     System.out.println(course.Id + course.Name +course.HoursPerWeek);
                 }
             }
-        }
+        }*/
     return departments;
     }
 
@@ -86,7 +90,7 @@ public static void SaveCorsesToDb(String pathToDb){
             Student [] students
                     = new Student[]
                     {
-                            m._studentRepository.CreateStudent("Shmykov","Alexander","Mitrich","Shmykov.alexander@Gmail.com","9031597221", new Date()),
+                            m._studentRepository.CreateStudent("Shmykov","Alexander "+new  Date (),"Mitrich","Shmykov.alexander@Gmail.com","9031597221", new Date()),
                             m._studentRepository.CreateStudent("Nikita","Lilia","","LNikita@bi-telco.com","", new Date()),
                             m._studentRepository.CreateStudent("Levkovich","Roman","","rlevkovich@bi-telco.com","", new Date()),
                             m._studentRepository.CreateStudent("Kovaleva","Ekaterina","","ekovaleva@bi-telco.com","", new Date()),
@@ -104,11 +108,13 @@ public static void SaveCorsesToDb(String pathToDb){
                 }
 
             }
-
-
+            System.out.println("===========================students====================================");
+            ShowObject(students);
+            System.out.println("===========================students====================================");
+            /*
             for (Student student : students) {
                 ShowStudent(student);
-            }
+            }*/
             for (Student student : students) {
                 for (Course course : student.Courses) {
                     m._studentRepository.RemoveCourseFromStudent(student.Id,course.Id);
@@ -124,12 +130,17 @@ public static void SaveCorsesToDb(String pathToDb){
 
     }
 
-    private static void ShowStudent(Student student) {
+    private static void ShowObject(Object o) {
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
         try {
-            System.out.println( ow.writeValueAsString(student));
+            System.out.println( ow.writeValueAsString(o));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+    private static void ShowStudent(Student student) {
+        System.out.println("===========================student====================================");
+        ShowObject(student);
+        System.out.println("===========================student====================================");
     }
 }
