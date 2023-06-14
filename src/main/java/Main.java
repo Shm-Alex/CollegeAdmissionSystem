@@ -3,6 +3,7 @@
 import CollegeAdmissionSystem.DepartmentCreateRepository.CourseSaveDbException;
 import CollegeAdmissionSystem.DepartmentCreateRepository.DepartmentCreateRepository;
 import CollegeAdmissionSystem.Entity.*;
+import CollegeAdmissionSystem.Presentation.GridBagLayout;
 import CollegeAdmissionSystem.Repository.IDepartmentCreateRepository;
 import CollegeAdmissionSystem.Repository.IDepartmentReadonlyRepository;
 import CollegeAdmissionSystem.Repository.IStudentRepository;
@@ -12,6 +13,7 @@ import CollegeAdmissionSystem.RepositoryStub.DepartmentReadonlyRepositoryStub;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.ObjectWriter;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -83,8 +85,8 @@ public static void SaveCorsesToDb(String pathToDb){
         try{
 
             var m= new Main(
-                    new DepartmentReadonlyRepository(DriverManager.getConnection("jdbc:sqlite:"+pathToDb)),
-                    new StudentRepository(DriverManager.getConnection("jdbc:sqlite:"+pathToDb))
+                    new DepartmentReadonlyRepository(DriverManager.getConnection(connectionString)),
+                    new StudentRepository(DriverManager.getConnection(connectionString))
             );
             var departments=m.ShowDepartments();
             Student [] students
@@ -128,6 +130,13 @@ public static void SaveCorsesToDb(String pathToDb){
             throw new RuntimeException(e);
         }
 
+        JFrame frame = new JFrame ( "GridBagLayoutTest" );
+        frame.setDefaultCloseOperation ( JFrame.EXIT_ON_CLOSE );
+
+        GridBagLayout.createPanelUI (frame.getContentPane ()) ;
+
+        frame.pack ();
+        frame.setVisible ( true );
     }
 
     private static void ShowObject(Object o) {
@@ -138,9 +147,5 @@ public static void SaveCorsesToDb(String pathToDb){
             throw new RuntimeException(e);
         }
     }
-    private static void ShowStudent(Student student) {
-        System.out.println("===========================student====================================");
-        ShowObject(student);
-        System.out.println("===========================student====================================");
-    }
+
 }
