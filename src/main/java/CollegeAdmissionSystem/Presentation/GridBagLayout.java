@@ -42,6 +42,9 @@ public class GridBagLayout {
             BirthDayText.setText(savedStudent.Birthday);
             this.savedStudent = savedStudent;
             tableModel.setRowCount(0);
+
+            if (savedStudent.Courses==null)return;//todo сделать чтобы при мапинге данных из бд в поле спиского типа оно создавалось  пустым
+
             for (Course course : savedStudent.Courses) {
                 Vector<String> row= new Vector<String>();
                 row.add(course.Name);
