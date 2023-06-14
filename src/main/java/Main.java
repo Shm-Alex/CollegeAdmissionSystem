@@ -82,11 +82,14 @@ public static void SaveCorsesToDb(String pathToDb){
     public static void main(String[] args) {
         String         pathToDb="C:\\Education\\Java\\sqlite-tools-win32-x86-3420000/CollegeAdmissionSystem";
         String connectionString = "jdbc:sqlite:"+pathToDb;
+
         try{
+            IDepartmentReadonlyRepository departmentRepository = new DepartmentReadonlyRepository(DriverManager.getConnection(connectionString));
+            IStudentRepository studentRepository = new StudentRepository(DriverManager.getConnection(connectionString));
 
             var m= new Main(
-                    new DepartmentReadonlyRepository(DriverManager.getConnection(connectionString)),
-                    new StudentRepository(DriverManager.getConnection(connectionString))
+                    departmentRepository,
+                    studentRepository
             );
             var departments=m.ShowDepartments();
             Student [] students
@@ -115,14 +118,19 @@ public static void SaveCorsesToDb(String pathToDb){
             System.out.println("===========================students====================================");
             /*
             for (Student student : students) {
-                ShowStudent(student);
-            }*/
-            for (Student student : students) {
                 for (Course course : student.Courses) {
                     m._studentRepository.RemoveCourseFromStudent(student.Id,course.Id);
                 }
             }
+        */
+            JFrame frame = new JFrame ( "GridBagLayoutTest" );
+            frame.setDefaultCloseOperation ( JFrame.EXIT_ON_CLOSE );
+            var gridBagLayout = new GridBagLayout( departmentRepository,
+                    studentRepository);
+            gridBagLayout.createPanelUI (frame.getContentPane ()) ;
 
+            frame.pack ();
+            frame.setVisible ( true );
 
         }
         catch (Exception e )
@@ -130,13 +138,6 @@ public static void SaveCorsesToDb(String pathToDb){
             throw new RuntimeException(e);
         }
 
-        JFrame frame = new JFrame ( "GridBagLayoutTest" );
-        frame.setDefaultCloseOperation ( JFrame.EXIT_ON_CLOSE );
-
-        GridBagLayout.createPanelUI (frame.getContentPane ()) ;
-
-        frame.pack ();
-        frame.setVisible ( true );
     }
 
     private static void ShowObject(Object o) {

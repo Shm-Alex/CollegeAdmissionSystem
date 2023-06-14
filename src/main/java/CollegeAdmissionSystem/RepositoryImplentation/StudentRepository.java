@@ -25,13 +25,7 @@ public class StudentRepository extends AbstractSqlLightRepository implements ISt
         try {
             List<Student>   result= preparedQuery(
                     "Select * from student ",
-                    new IPrepareStatement() {
-                        @Override
-                        public PreparedStatement AdditionalPrepareStatement(PreparedStatement ps) throws SQLException {
-
-                            return ps;
-                        }
-                    },
+                    null,
                     Student.class);
             //if (result.isEmpty()) return null;
             for (Student student : result) {
