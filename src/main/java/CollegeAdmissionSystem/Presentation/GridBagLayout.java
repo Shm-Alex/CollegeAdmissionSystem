@@ -28,7 +28,9 @@ public class GridBagLayout {
     private JLabel lastNameLbl;
     private JTextField lastNameTxt  , surnameText, nameText, phoneText, mailText,BirthDayText,IdText;
     JComboBox facultyBox =new JComboBox(), departBox=new JComboBox(), courseBox=new JComboBox();
-    JTable StudentCourses =new JTable( new Object[0][0],new String[] {"Course Name", "Department","Direction","Hours per week","Course Id"});
+    DefaultTableModel tableModel = new DefaultTableModel( new String[0][0],new String[] {"Course Name", "Department","Direction","Hours per week","Course Id"});
+    JTable StudentCourses =new JTable(tableModel);
+    JScrollPane pane = new JScrollPane(StudentCourses);
     public void setSavedStudent(Student savedStudent) {
         if(savedStudent !=null)
         {
@@ -39,7 +41,6 @@ public class GridBagLayout {
             IdText.setText(String.valueOf(savedStudent.Id));
             BirthDayText.setText(savedStudent.Birthday);
             this.savedStudent = savedStudent;
-            DefaultTableModel tableModel=  (DefaultTableModel)  StudentCourses.getModel();
             tableModel.setRowCount(0);
             for (Course course : savedStudent.Courses) {
                 Vector<String> row= new Vector<String>();
@@ -216,6 +217,10 @@ public class GridBagLayout {
                                                   ActionListener() {
                                                       @Override
                                                       public void actionPerformed(ActionEvent e) {
+
+                                                          setSavedStudent(
+                                                                  _studentRepository.RemoveCourseFromStudent(savedStudent.Id,savedStudent.Courses.get( StudentCourses.getSelectedRow()).Id)
+                                                          );
 
                                                       }
                                                   });
