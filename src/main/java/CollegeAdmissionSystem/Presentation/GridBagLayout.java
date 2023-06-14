@@ -9,6 +9,8 @@ import CollegeAdmissionSystem.Repository.IStudentRepository;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -24,7 +26,7 @@ public class GridBagLayout {
     private IDepartmentReadonlyRepository _departmentRepository;
     private IStudentRepository _studentRepository;
     private JLabel lastNameLbl;
-    private JTextField lastNameTxt  , surnameText, nameText, phoneText, mailText,IdText;
+    private JTextField lastNameTxt  , surnameText, nameText, phoneText, mailText,BirthDayText,IdText;
     JComboBox facultyBox =new JComboBox(), departBox=new JComboBox(), courseBox=new JComboBox();
     JTable StudentCourses =new JTable( new Object[0][0],new String[] {"Course Name", "Department","Direction","Hours per week","Course Id"});
     public void setSavedStudent(Student savedStudent) {
@@ -33,8 +35,9 @@ public class GridBagLayout {
             surnameText.setText(savedStudent.SurName);
             lastNameTxt.setText(savedStudent.LastName);
             nameText.setText(savedStudent.Name);
-            phoneText.setText(savedStudent.SurName);
+            phoneText.setText(savedStudent.Phone);
             IdText.setText(String.valueOf(savedStudent.Id));
+            BirthDayText.setText(savedStudent.Birthday);
             this.savedStudent = savedStudent;
             DefaultTableModel tableModel=  (DefaultTableModel)  StudentCourses.getModel();
             tableModel.setRowCount(0);
@@ -100,6 +103,7 @@ public class GridBagLayout {
             "Name",
             "Phone number",
             "E-mail",
+             "BirthDay",
              "Number"
             };
     public  void createPanelUI(Container container) {
@@ -237,7 +241,7 @@ public class GridBagLayout {
             constraints.gridx--;
         };
             /*
-        "Sur Name","Last Name","Name","Phone number","E-mail"
+"Sur Name","Last Name","Name","Phone number","E-mail","BirthDay","Number"
        Сохраним ссылки на элементы массива  чтобы ими было легче оперировать
         */
         surnameText= studentTxtFields[0] ;
@@ -245,17 +249,28 @@ public class GridBagLayout {
         nameText= studentTxtFields[2] ;
         phoneText= studentTxtFields[3] ;
         mailText= studentTxtFields[4] ;
-        IdText= studentTxtFields[5] ;
+        BirthDayText=studentTxtFields[5] ;
+        IdText= studentTxtFields[6] ;
+
         IdText.setEditable(false);
         constraints.gridy++  ;
-        container.add ( new JButton("Save 2 db"){
-            @Override
-            public void addActionListener(ActionListener l) {
-                super.addActionListener(l);
-              setSavedStudent(_studentRepository.CreateStudent(lastNameTxt.getText(),nameText.getText(),surnameText.getText(),mailText.getText(),phoneText.getText(),new Date()));
+
+        JButton save2dbBtn = new JButton("Save 2 db");
+        save2dbBtn.addActionListener(e -> {
+            String txt =BirthDayText.getText();
+            //Wed Jun 14 18:43:25 MSK 2023
+            SimpleDateFormat format = new SimpleDateFormat("EEE MMM d hh:mm:ss G yyyy");
+            Date dd=null;
+            try {
+             dd= format.parse(txt);
+
+            } catch (ParseException ex) {
 
             }
-        }, constraints );
+            setSavedStudent(_studentRepository.CreateStudent(lastNameTxt.getText(),nameText.getText(),surnameText.getText(),mailText.getText(),phoneText.getText(),dd));
+
+        });
+        container.add (save2dbBtn, constraints );
         mailText.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {

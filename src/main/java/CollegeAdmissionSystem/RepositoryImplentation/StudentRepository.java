@@ -116,7 +116,7 @@ public class StudentRepository extends AbstractSqlLightRepository implements ISt
 
             List<Student>   result= preparedQuery(
                     //"insert into Student(LastName, Name, SurName,  Email,  Phone,  Birthday) values('test','test','test','test@test.com','1234567','1-mar-1989') RETURNING *;",
-                    "insert into Student(LastName, Name, SurName,  Email,  Phone,  Birthday) values(?,?,?,?,?,?) RETURNING *;",
+                     "insert into Student(LastName, Name, SurName,  Email,  Phone,  Birthday) values(?,?,?,?,?,?) RETURNING *;",
                     new IPrepareStatement() {
                         @Override
                         public PreparedStatement AdditionalPrepareStatement(PreparedStatement ps) throws SQLException {
@@ -125,7 +125,7 @@ public class StudentRepository extends AbstractSqlLightRepository implements ISt
                             ps.setString(3,SurName);
                             ps.setString(4,Email);
                             ps.setString(5,Phone);
-                            ps.setString(6, Birthday.toString());
+                            ps.setString(6, Birthday!=null?Birthday.toString():" ");
                             return ps;
                         }
                     },
@@ -254,17 +254,19 @@ public class StudentRepository extends AbstractSqlLightRepository implements ISt
 
             List<Student>   result= preparedQuery(
 
-                    "update  Student set LastName=?, Name=?, SurName=?,  Email=?,  Phone=?,  Birthday=? where id=?  RETURNING *;",
+                    birthday!=null?"update  Student set LastName=?, Name=?, SurName=?,  Email=?,  Phone=?,  Birthday=? where id=?  RETURNING *;"
+                    :"update  Student set LastName=?, Name=?, SurName=?,  Email=?,  Phone=? where id=?  RETURNING *;",
                     new IPrepareStatement() {
                         @Override
                         public PreparedStatement AdditionalPrepareStatement(PreparedStatement ps) throws SQLException {
-                            ps.setString(1,lastName);
-                            ps.setString(2,name);
-                            ps.setString(3,surName);
-                            ps.setString(4,email);
-                            ps.setString(5,phone);
-                            ps.setString(6,birthday.toString());
-                            ps.setInt(7,id);
+                           int i=1;
+                            ps.setString(i++,lastName);
+                            ps.setString(i++,name);
+                            ps.setString(i++,surName);
+                            ps.setString(i++,email);
+                            ps.setString(i++,phone);
+                            if (birthday!=null)ps.setString(i++,birthday.toString());
+                            ps.setInt(i++,id);
                             return ps;
                         }
                     },
