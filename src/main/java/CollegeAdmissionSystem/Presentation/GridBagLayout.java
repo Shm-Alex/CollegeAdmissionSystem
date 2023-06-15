@@ -70,7 +70,7 @@ public class GridBagLayout {
             facultyBox.addItem(department.Name);
         }
         facultyBox.addItemListener(e -> {
-            System.out.println(" facultyBox.addItemListener");
+         //   System.out.println(" facultyBox.addItemListener");
             var directions=departments.get(facultyBox.getSelectedIndex()).Directions;
             departBox.removeAllItems();
             courseBox.removeAllItems();
@@ -81,7 +81,7 @@ public class GridBagLayout {
             }
         });
         departBox.addItemListener(e -> {
-            System.out.println(" departBox.addItemListener");
+         //   System.out.println(" departBox.addItemListener");
             courseBox.removeAllItems();
             addCourseBtn.setEnabled(false);
             var directions=departments.get(facultyBox.getSelectedIndex()).Directions;
